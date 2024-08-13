@@ -11,14 +11,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JobApplicationService {
     private final JobApplicationRepository jobApplicationRepository;
-
+    private final JopPostRepository jopPostRepository;
+    private final UserRepository userRepository;
+    
     public List<JobApplication> getAllJobApplications() {
         return jobApplicationRepository.findAll();
     }
 
-    public void addJobApplication(JobApplication jobApplication) {
-        jobApplicationRepository.save(jobApplication);
+    public String addJobApplication(JobApplication jobApplication) {
+        if(jopPostRepository.getById(jobApplication.getPostId())!= null && userRepository.getById(jobApplication.getUserId())!=null) {
+            jobApplicationRepository.save(jobApplication);
+            return "Job Application Added Successfully";
+        }
+        
+            return "Job Application Not Added Successfully";   
     }
+    
 
     public boolean deleteJobApplication(Integer id) {
         JobApplication jobApplication = jobApplicationRepository.getById(id);
